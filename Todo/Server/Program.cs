@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Server.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<TodolistContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("LocalhostNpgsqlConnectionString")));
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
