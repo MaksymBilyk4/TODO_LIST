@@ -11,14 +11,9 @@ builder.Services.AddDbContext<TodolistContext>(options =>
 
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
