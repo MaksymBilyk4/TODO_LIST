@@ -18,24 +18,16 @@ public class TodoService : ITodoService
 
     public async Task CreateTodoAsync(TodoCreateRequestDto dto)
     {
-        if (dto.Description.Length == 0)
-        {
-            throw new ArgumentException("Description can't be empty");
-        }
+        ValidateTodo(dto.Title, dto.Description);
 
-        if (dto.Title.Length < 3)
+        var todo = new Todo
         {
-            throw new ArgumentException("Title should contain at least 3 characters");
-        }
-        
-        Todo todo = new Todo
-        {
-            Description = dto.Description,
             Title = dto.Title,
+            Description = dto.Description,
             IsDone = dto.Status
         };
 
-        await _todolistContext.AddAsync(todo);
+        _todolistContext.Todos.Add(todo);
         await _todolistContext.SaveChangesAsync();
     }
 
@@ -76,28 +68,14 @@ public class TodoService : ITodoService
     public async Task UpdateTodoAsync(TodoPatchRequestDto dto, int id)
     {
         Todo todo = await FindByIdAsync(id, false);
-
-        if (dto.Description != null)
-        {
-            if (dto.Description.Length == 0)
-            {
-                throw new ArgumentException("Description can't be empty");
-            }
-
-            todo.Description = dto.Description;
-        }
+        ValidateTodo(dto.Title, dto.Description);
         
+        if (dto.Description != null)
+            todo.Description = dto.Description;
+
         if (dto.Title != null)
-        {
-            if (dto.Title.Length < 3)
-            {
-                throw new ArgumentException("Title should contain at least 3 characters");
-            }
-
             todo.Title = dto.Title;
-        }
 
-        _todolistContext.Todos.Update(todo);
         await _todolistContext.SaveChangesAsync();
 
     }
@@ -112,5 +90,14 @@ public class TodoService : ITodoService
         }
 
         return todo;
+    }
+    
+    private void ValidateTodo(string? title, string? description)
+    {
+        if (description != null && description.Length == 0)
+            throw new ArgumentException("Description can't be empty");
+
+        if (title != null && title.Length < 3)
+            throw new ArgumentException("Title should contain at least 3 characters");
     }
 }
