@@ -61,7 +61,6 @@ public class TodoService : ITodoService
         Todo todo = await FindByIdAsync(id, false);
 
         todo.IsDone = true;
-        _todolistContext.Todos.Update(todo);
         await _todolistContext.SaveChangesAsync();
     }
 
