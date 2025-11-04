@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Server.Models;
 
@@ -27,10 +25,14 @@ public partial class TodolistContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description)
+                .IsRequired()
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            entity.Property(e => e.IsDone).HasColumnName("is_done");
+            entity.Property(e => e.IsDone)
+                .IsRequired()
+                .HasColumnName("is_done");
             entity.Property(e => e.Title)
+                .IsRequired()
                 .HasMaxLength(255)
                 .HasColumnName("title");
         });
