@@ -8,8 +8,10 @@ namespace Server.Services;
 public class TodoService : ITodoService
 {
 
+    private const int  MinTitleLength = 5; 
     private readonly TodolistContext _todolistContext;
     
+    public TodoService() {}
 
     public TodoService(TodolistContext todolistContext)
     {
@@ -91,12 +93,12 @@ public class TodoService : ITodoService
         return todo;
     }
     
-    private void ValidateTodo(string? title, string? description)
+    public void ValidateTodo(string? title, string? description)
     {
         if (description != null && description.Length == 0)
             throw new ArgumentException("Description can't be empty");
 
-        if (title != null && title.Length < 3)
-            throw new ArgumentException("Title should contain at least 3 characters");
+        if (title != null && title.Length < MinTitleLength)
+            throw new ArgumentException($"Title should contain at least {MinTitleLength} characters");
     }
 }
